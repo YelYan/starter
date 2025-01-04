@@ -1,4 +1,6 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
+
+import CheckAuth from "./components/common/CheckAuth";
 
 // Admin
 import AdminLayout from "./components/admin-view/AdminLayout";
@@ -24,22 +26,58 @@ import ShoppingAccount from "./pages/shopping-view/ShoppingAccount";
 import NotFound from "./pages/NoFound/NotFound";
 
 const App = () => {
+  const user = {
+    userName: "yel yan",
+    email: "yelyan@gmail.com",
+    role: "user",
+  };
+  const isAuthenticated = true;
   return (
     <div className="bg-white flex flex-col overflow-hidden">
       <Routes>
+        <Route
+          path="/"
+          element={
+            isAuthenticated && user?.role === "admin" ? (
+              <Navigate to={"/admin/dashboard"} />
+            ) : (
+              <ShoppingLayout />
+            )
+          }
+        >
+          <Route index element={<Home />} />
+        </Route>
+
+        {/* public auth routes */}
         <Route path="auth" element={<AuthLayout />}>
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
         </Route>
 
-        <Route path="admin" element={<AdminLayout />}>
+        {/* protected admin routes */}
+        <Route
+          path="admin/*"
+          element={
+            <CheckAuth isAuthenticated={isAuthenticated} user={user}>
+              <AdminLayout />
+            </CheckAuth>
+          }
+        >
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="features" element={<AdminFeatures />} />
           <Route path="products" element={<AdminProducts />} />
           <Route path="orders" element={<AdminOrders />} />
         </Route>
 
-        <Route path="shop" element={<ShoppingLayout />}>
+        {/* protected shopping routes */}
+        <Route
+          path="shop/*"
+          element={
+            <CheckAuth isAuthenticated={isAuthenticated} user={user}>
+              <ShoppingLayout />
+            </CheckAuth>
+          }
+        >
           <Route path="home" element={<Home />} />
           <Route path="listing" element={<ShoppinListing />} />
           <Route path="checkout" element={<ShoppingCheckout />} />

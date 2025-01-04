@@ -92,7 +92,18 @@ const HeaderRightContent = () => {
   );
 };
 
+const AuthButtons = () => {
+  const navigate = useNavigate();
+
+  return (
+    <div className="flex gap-2">
+      <Button onClick={() => navigate("/auth/login")}>Login</Button>
+      <Button onClick={() => navigate("/auth/register")}>Register</Button>
+    </div>
+  );
+};
 const ShoppingHeader = () => {
+  const isAuthenticated = true;
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background p-4 flex items-center justify-between">
       <Link to={"/shop/home"} className="flex items-center gap-1">
@@ -112,14 +123,20 @@ const ShoppingHeader = () => {
           </Button>
         </SheetTrigger>
         <SheetContent side={"left"} className="w-full  space-y-3">
-          <HeaderRightContent />
+          {isAuthenticated ? <AuthButtons /> : <HeaderRightContent />}
           <MenuItems />
         </SheetContent>
       </Sheet>
 
-      <h5 className="hidden lg:block">
-        <HeaderRightContent />
-      </h5>
+      {isAuthenticated ? (
+        <div className="hidden lg:block">
+          <AuthButtons />
+        </div>
+      ) : (
+        <h5 className="hidden lg:block">
+          <HeaderRightContent />
+        </h5>
+      )}
     </header>
   );
 };
