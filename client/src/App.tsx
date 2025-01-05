@@ -14,6 +14,9 @@ import AuthLayout from "./components/auth/AuthLayout";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 
+// UnAuth
+import UnAuth from "./pages/unauth/UnAuth";
+
 //Shopping
 import ShoppingLayout from "./components/shopping-view/ShoppingLayout";
 import Home from "./pages/shopping-view/Home";
@@ -84,6 +87,7 @@ const App = () => {
           <Route path="account" element={<ShoppingAccount />} />
           <Route path="search" element={<Search />} />
         </Route>
+        <Route path="unauth-page" element={<UnAuth />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
