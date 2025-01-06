@@ -5,7 +5,6 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import Logo from "/favicon.svg";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,7 +13,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useToast } from "@/hooks/use-toast";
+import { ToastAction } from "../ui/toast";
 
+import Logo from "/favicon.svg";
+import DefaultPic from "/default-pic.png";
+import { useAppSelector, useAppDispatch } from "@/store/hook";
+import { logoutUser } from "@/store/authslice/authSlice";
 import { shoppingHeaderMenuItems } from "@/config";
 import UserCartWrapper from "./UserCartWrapper";
 
@@ -37,7 +42,35 @@ const MenuItems = () => {
 
 const HeaderRightContent = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { toast } = useToast();
   const [openCartSheet, setOpenCartSheet] = useState(false);
+
+  function handleLogOut() {
+    dispatch(logoutUser())
+      .unwrap()
+      .then((result) => {
+        if (result.success) {
+          toast({
+            title: result.message,
+            description: "You have successfully logged out✅",
+          });
+          navigate("/auth/login");
+        }
+      })
+      .catch((error) => {
+        toast({
+          title: error,
+          description: "You cannot logg out! some error occured",
+          variant: "destructive",
+          action: (
+            <ToastAction className="bg-white text-black" altText="Try again">
+              Try again
+            </ToastAction>
+          ),
+        });
+      });
+  }
   return (
     <div className="flex items-center gap-4">
       <Sheet
@@ -63,10 +96,7 @@ const HeaderRightContent = () => {
       <DropdownMenu>
         <DropdownMenuTrigger asChild className="cursor-pointer">
           <Avatar>
-            <AvatarImage
-              src="https://plus.unsplash.com/premium_photo-1721169137223-4af7f08c7c6a?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-              alt="@shadcn"
-            />
+            <AvatarImage src={DefaultPic || ""} alt="user's image" />
             <AvatarFallback className="bg-black text-white font-bold">
               U
             </AvatarFallback>
@@ -83,7 +113,7 @@ const HeaderRightContent = () => {
             Account
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="cursor-pointer">
+          <DropdownMenuItem className="cursor-pointer" onClick={handleLogOut}>
             <LogOut />
             Log out
           </DropdownMenuItem>
@@ -109,7 +139,8 @@ const AuthButtons = () => {
 };
 
 const ShoppingHeader = () => {
-  const isAuthenticated = false;
+  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
+  // const isAuthenticated = false;
 
   function checkAuthenticated(isAuthenticated: boolean) {
     return <>{isAuthenticated ? <HeaderRightContent /> : <AuthButtons />}</>;

@@ -1,12 +1,12 @@
 import {createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { API_URL } from "@/config/api";
-import { ReqLoginFormT , ReqRegisterFormT } from "@/types/auth";
+import { ReqLoginFormT , ReqRegisterFormT , ResLoginFormT} from "@/types/auth";
 
 export interface authStateT {
     isAuthenticated : boolean,
     isLoading : boolean,
-    user : null
+    user : null | ResLoginFormT
     error? : string | null
 }
 
@@ -29,6 +29,25 @@ try {
 export const loginUser = createAsyncThunk("/auth/login" , async ( formData : ReqLoginFormT, {rejectWithValue}) => {
     try {
         const response = await axios.post(`${API_URL}/auth/login`, formData , {withCredentials : true});
+        return response.data
+    } catch (error : any) {
+        return rejectWithValue(error?.response?.data?.message || "Something went wrong!")
+    }
+})
+export const logoutUser = createAsyncThunk("/auth/logout" , async (_, {rejectWithValue}) => {
+    try {
+        const response = await axios.post(`${API_URL}/auth/logout` , {withCredentials : true});
+        return response.data
+    } catch (error : any) {
+        return rejectWithValue(error?.response?.data?.message || "Something went wrong!")
+    }
+})
+export const checkAuthenticated = createAsyncThunk("/auth/check-auth" , async (_, {rejectWithValue}) => {
+    try {
+        const response = await axios.get(`${API_URL}/auth/check-auth` , {withCredentials : true,         headers: {
+            "Cache-Control":
+              "no-store, no-cache, must-revalidate, proxy-revalidate",
+          },});
         return response.data
     } catch (error : any) {
         return rejectWithValue(error?.response?.data?.message || "Something went wrong!")
@@ -73,6 +92,34 @@ export const authSlice = createSlice({
             state.user = null;
             state.isAuthenticated  = false
             state.error = action.error.message || "Login Failed! Please try again"
+        })
+        .addCase(logoutUser.pending, (state) => {
+            state.isLoading = true
+        })
+        .addCase(logoutUser.fulfilled , (state , action) => {
+            state.isLoading = false;
+            state.user = action.payload.success ? action.payload.user : null;
+            state.isAuthenticated  = false
+        })
+        .addCase(logoutUser.rejected , (state, action) => {
+            state.isLoading = false;
+            state.user = null;
+            state.isAuthenticated  = false
+            state.error = action.error.message || "Logout Failed! Please try again"
+        })
+        .addCase(checkAuthenticated.pending, (state) => {
+            state.isLoading = true
+        })
+        .addCase(checkAuthenticated.fulfilled , (state , action) => {
+            state.isLoading = false;
+            state.user = action.payload.success ? action.payload.user : null;
+            state.isAuthenticated  = action.payload.success
+        })
+        .addCase(checkAuthenticated.rejected , (state, action) => {
+            state.isLoading = false;
+            state.user = null;
+            state.isAuthenticated  = false
+            state.error = action.error.message || "Please try again"
         })
     },
 })

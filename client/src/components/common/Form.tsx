@@ -67,6 +67,21 @@ const CommonForm = ({
     ),
   });
 
+  // error message animation
+  const renderError = (name: string) => (
+    <AnimatePresence mode="wait">
+      <motion.p
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -10 }}
+        transition={{ duration: 0.15, type: "tween" }}
+        className="absolute text-red-500 text-sm -bottom-5"
+      >
+        {errors[name]?.message?.toString()}
+      </motion.p>
+    </AnimatePresence>
+  );
+
   return (
     //@ts-ignore
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -91,19 +106,8 @@ const CommonForm = ({
                           type={formControl.type}
                           placeholder={formControl.placeholder}
                         />
-                        {errors[formControl.name] && (
-                          <AnimatePresence mode="wait">
-                            <motion.p
-                              initial={{ opacity: 0, y: -10 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              exit={{ opacity: 0, y: -10 }}
-                              transition={{ duration: 0.15, type: "tween" }}
-                              className="absolute text-red-500 text-sm -bottom-5"
-                            >
-                              {errors[formControl.name]?.message?.toString()}
-                            </motion.p>
-                          </AnimatePresence>
-                        )}
+                        {errors[formControl.name] &&
+                          renderError(formControl.name)}
                       </>
                     );
 
@@ -115,19 +119,8 @@ const CommonForm = ({
                           id={formControl.name}
                           placeholder={formControl.placeholder}
                         />
-                        {errors[formControl.name] && (
-                          <AnimatePresence mode="wait">
-                            <motion.p
-                              initial={{ opacity: 0, y: -10 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              exit={{ opacity: 0, y: -10 }}
-                              transition={{ duration: 0.15, type: "tween" }}
-                              className="absolute text-red-500 text-sm -bottom-5"
-                            >
-                              {errors[formControl.name]?.message?.toString()}
-                            </motion.p>
-                          </AnimatePresence>
-                        )}
+                        {errors[formControl.name] &&
+                          renderError(formControl.name)}
                       </>
                     );
 
@@ -157,19 +150,8 @@ const CommonForm = ({
                               )}
                           </SelectContent>
                         </Select>
-                        {errors[formControl.name] && (
-                          <AnimatePresence mode="wait">
-                            <motion.p
-                              initial={{ opacity: 0, y: -10 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              exit={{ opacity: 0, y: -10 }}
-                              transition={{ duration: 0.15, type: "tween" }}
-                              className="absolute text-red-500 text-sm -bottom-5"
-                            >
-                              {errors[formControl.name]?.message?.toString()}
-                            </motion.p>
-                          </AnimatePresence>
-                        )}
+                        {errors[formControl.name] &&
+                          renderError(formControl.name)}
                       </>
                     );
 

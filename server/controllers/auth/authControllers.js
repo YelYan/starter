@@ -12,11 +12,13 @@ const registerUser = asyncHandler(async (req, res) => {
   const { userName, email, password } = req.body;
 
   const checkUser = await checkUserFn(email);
+  const checkUserByName = await User.findOne({ userName });
 
-  if (checkUser) {
+  if (checkUser || checkUserByName) {
     return res.status(400).json({
       success: false,
-      message: "User Already exists with the same email! Please try again",
+      message:
+        "User Already exists with the same email or same username! Please try again with different name or email",
     });
   }
 

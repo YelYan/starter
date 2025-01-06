@@ -8,10 +8,10 @@ const {
   authMiddleware,
 } = require("../../controllers/auth/authControllers");
 
-router.post("/register", registerUser);
-router.post("/login", loginUser);
-router.post("/logout", logoutUser);
-router.get("/check-auth", authMiddleware, (req, res) => {
+router.post("/auth/register", registerUser);
+router.post("/auth/login", loginUser);
+router.post("/auth/logout", logoutUser);
+router.get("/auth/check-auth", authMiddleware, (req, res) => {
   const user = req.user;
   res.status(200).json({
     success: true,

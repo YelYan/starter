@@ -5,7 +5,7 @@ import { ResLoginFormT } from "@/types/auth";
 type CheckAuthT = {
   isAuthenticated: boolean;
   children: React.ReactNode;
-  user: ResLoginFormT;
+  user: ResLoginFormT | null;
 };
 
 const CheckAuth = ({ isAuthenticated, user, children }: CheckAuthT) => {
@@ -13,6 +13,7 @@ const CheckAuth = ({ isAuthenticated, user, children }: CheckAuthT) => {
 
   console.log(location.pathname);
   console.log(user);
+  console.log(isAuthenticated, "authenticated");
 
   // If the user is an admin and is on the root path, redirect to dashboard
   if (location.pathname === "/" && isAuthenticated && user?.role === "admin") {
@@ -20,13 +21,13 @@ const CheckAuth = ({ isAuthenticated, user, children }: CheckAuthT) => {
   }
 
   // Handle other authentication checks and redirects for the user
-  if (
-    !isAuthenticated &&
-    !location.pathname.includes("/login") &&
-    !location.pathname.includes("/register")
-  ) {
-    return <Navigate to="/auth/login" />;
-  }
+  // if (
+  //   !isAuthenticated &&
+  //   !location.pathname.includes("/login") &&
+  //   !location.pathname.includes("/register")
+  // ) {
+  //   return <Navigate to="/auth/login" />;
+  // }
 
   if (
     isAuthenticated &&

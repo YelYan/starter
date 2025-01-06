@@ -1,4 +1,7 @@
+import { useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
+import { useAppSelector, useAppDispatch } from "./store/hook";
+import { checkAuthenticated } from "./store/authslice/authSlice";
 
 import CheckAuth from "./components/common/CheckAuth";
 
@@ -29,12 +32,23 @@ import ShoppingAccount from "./pages/shopping-view/ShoppingAccount";
 import NotFound from "./pages/NoFound/NotFound";
 
 const App = () => {
-  const user = {
-    userName: "yel yan",
-    email: "yelyan@gmail.com",
-    role: "user",
-  };
-  const isAuthenticated = true;
+  const dispatch = useAppDispatch();
+
+  const { isAuthenticated, user, isLoading } = useAppSelector(
+    (state) => state.auth
+  );
+
+  console.log(isAuthenticated, "authenticated!!!");
+  console.log(user, "user!!!");
+  console.log(isLoading, "isLoading!!!");
+
+  // every time the app loads, check if the user is authenticated
+  useEffect(() => {
+    dispatch(checkAuthenticated());
+  }, [dispatch]);
+
+  if (isLoading) return <div>Loading...</div>;
+
   return (
     <div className="bg-white flex flex-col overflow-hidden">
       <Routes>
