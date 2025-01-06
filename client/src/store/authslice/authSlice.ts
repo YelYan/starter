@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { API_URL } from "@/config/api";
-import { LoginFormT , RegisterFormT } from "@/types/auth";
+import { ReqLoginFormT , ReqRegisterFormT } from "@/types/auth";
 
 export interface authStateT {
     isAuthenticated : boolean,
@@ -17,7 +17,7 @@ const initialState : authStateT = {
     error : null
 }
 
-export const registerUser = createAsyncThunk("/auth/register" , async ( formData : RegisterFormT, {rejectWithValue}) => {
+export const registerUser = createAsyncThunk("/auth/register" , async ( formData : ReqRegisterFormT, {rejectWithValue}) => {
 try {
     const response = await axios.post(`${API_URL}/auth/register`, formData , {withCredentials : true});
     return response.data
@@ -26,7 +26,7 @@ try {
 }
 })
 
-export const loginUser = createAsyncThunk("/auth/login" , async ( formData : LoginFormT, {rejectWithValue}) => {
+export const loginUser = createAsyncThunk("/auth/login" , async ( formData : ReqLoginFormT, {rejectWithValue}) => {
     try {
         const response = await axios.post(`${API_URL}/auth/login`, formData , {withCredentials : true});
         return response.data

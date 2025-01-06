@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Store, Menu, UserCog, LogOut, ShoppingCart } from "lucide-react";
+import { Menu, UserCog, LogOut, ShoppingCart } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Logo from "/favicon.svg";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -97,18 +98,27 @@ const AuthButtons = () => {
 
   return (
     <div className="flex gap-2">
-      <Button onClick={() => navigate("/auth/login")}>Login</Button>
-      <Button onClick={() => navigate("/auth/register")}>Register</Button>
+      <Button variant={"primary"} onClick={() => navigate("/auth/login")}>
+        Login
+      </Button>
+      <Button variant={"outline"} onClick={() => navigate("/auth/register")}>
+        Register
+      </Button>
     </div>
   );
 };
+
 const ShoppingHeader = () => {
-  const isAuthenticated = true;
+  const isAuthenticated = false;
+
+  function checkAuthenticated(isAuthenticated: boolean) {
+    return <>{isAuthenticated ? <HeaderRightContent /> : <AuthButtons />}</>;
+  }
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background p-4 flex items-center justify-between">
       <Link to={"/shop/home"} className="flex items-center gap-1">
-        <Store className="w-5 h-5" />
-        <h4 className="font-extrabold">E-commerce</h4>
+        <h4 className="font-extrabold">SnapBuy</h4>
+        <img src={Logo} alt="" className="w-5 h-5" />
       </Link>
 
       <div className="hidden lg:block">
@@ -123,20 +133,14 @@ const ShoppingHeader = () => {
           </Button>
         </SheetTrigger>
         <SheetContent side={"left"} className="w-full  space-y-3">
-          {isAuthenticated ? <AuthButtons /> : <HeaderRightContent />}
+          {checkAuthenticated(isAuthenticated)}
           <MenuItems />
         </SheetContent>
       </Sheet>
 
-      {isAuthenticated ? (
-        <div className="hidden lg:block">
-          <AuthButtons />
-        </div>
-      ) : (
-        <h5 className="hidden lg:block">
-          <HeaderRightContent />
-        </h5>
-      )}
+      <div className="hidden lg:block">
+        {checkAuthenticated(isAuthenticated)}
+      </div>
     </header>
   );
 };

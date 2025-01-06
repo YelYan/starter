@@ -1,4 +1,4 @@
-import React from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -14,12 +14,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CommonFormPropsT } from "@/types/common";
+import LoadingSpinner from "@/components/ui/loadingSpinner";
 
 const CommonForm = ({
   onSubmit,
   formControls,
   buttonText,
-}: CommonFormPropsT) => {
+  isLoading,
+}: CommonFormPropsT<any>) => {
   // Define Zod schema based on formControls
   const schema = z.object(
     formControls.reduce<Record<string, z.ZodTypeAny>>((acc, formControl) => {
@@ -70,7 +72,10 @@ const CommonForm = ({
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col gap-3  w-[15rem] lg:w-[20rem]">
         {formControls.map((formControl) => (
-          <div key={formControl.name} className="w-full grid gap-3">
+          <div
+            key={formControl.name}
+            className="w-full grid gap-3 relative mb-3"
+          >
             <Label htmlFor={formControl.name}>{formControl.label}</Label>
             <Controller
               name={formControl.name}
@@ -87,9 +92,17 @@ const CommonForm = ({
                           placeholder={formControl.placeholder}
                         />
                         {errors[formControl.name] && (
-                          <p className="text-red-500 text-sm">
-                            {errors[formControl.name]?.message?.toString()}
-                          </p>
+                          <AnimatePresence mode="wait">
+                            <motion.p
+                              initial={{ opacity: 0, y: -10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: -10 }}
+                              transition={{ duration: 0.15, type: "tween" }}
+                              className="absolute text-red-500 text-sm -bottom-5"
+                            >
+                              {errors[formControl.name]?.message?.toString()}
+                            </motion.p>
+                          </AnimatePresence>
                         )}
                       </>
                     );
@@ -103,9 +116,17 @@ const CommonForm = ({
                           placeholder={formControl.placeholder}
                         />
                         {errors[formControl.name] && (
-                          <p className="text-red-500 text-sm">
-                            {errors[formControl.name]?.message?.toString()}
-                          </p>
+                          <AnimatePresence mode="wait">
+                            <motion.p
+                              initial={{ opacity: 0, y: -10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: -10 }}
+                              transition={{ duration: 0.15, type: "tween" }}
+                              className="absolute text-red-500 text-sm -bottom-5"
+                            >
+                              {errors[formControl.name]?.message?.toString()}
+                            </motion.p>
+                          </AnimatePresence>
                         )}
                       </>
                     );
@@ -137,9 +158,17 @@ const CommonForm = ({
                           </SelectContent>
                         </Select>
                         {errors[formControl.name] && (
-                          <p className="text-red-500 text-sm">
-                            {errors[formControl.name]?.message?.toString()}
-                          </p>
+                          <AnimatePresence mode="wait">
+                            <motion.p
+                              initial={{ opacity: 0, y: -10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: -10 }}
+                              transition={{ duration: 0.15, type: "tween" }}
+                              className="absolute text-red-500 text-sm -bottom-5"
+                            >
+                              {errors[formControl.name]?.message?.toString()}
+                            </motion.p>
+                          </AnimatePresence>
                         )}
                       </>
                     );
@@ -152,8 +181,13 @@ const CommonForm = ({
           </div>
         ))}
       </div>
-      <Button type="submit" className="mt-4 w-full">
-        {buttonText || "Submit"}
+      <Button
+        disabled={isLoading}
+        variant={"primary"}
+        type="submit"
+        className="mt-4 w-full relative"
+      >
+        {isLoading ? <LoadingSpinner /> : <>{buttonText || "Submit"}</>}
       </Button>
     </form>
   );

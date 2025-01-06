@@ -3,7 +3,7 @@ type ReqAuthFormbaseT = {
     password : string
 }
 
-export type LoginFormT = ReqAuthFormbaseT
+export type ReqLoginFormT = ReqAuthFormbaseT
 
 export type ResLoginFormT = Omit<ReqAuthFormbaseT, 'password'> & {
     role? : string
