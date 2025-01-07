@@ -16,6 +16,7 @@ import { ReqProductT } from "@/types/products";
 const AdminProducts = () => {
   const [openProductsDialog, setOpenProductsDialog] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imageLoading, setImageLoading] = useState(false);
 
   function closeProductsDialog() {
     setOpenProductsDialog(!openProductsDialog);
@@ -44,7 +45,12 @@ const AdminProducts = () => {
           </SheetHeader>
 
           <div className="mt-4 space-y-4">
-            <Imageuploader imageFile={imageFile} setImageFile={setImageFile} />
+            <Imageuploader
+              imageFile={imageFile}
+              setImageFile={setImageFile}
+              imageLoading={imageLoading}
+              setImageLoading={setImageLoading}
+            />
             <CommonForm
               formControls={addProductFormElements}
               onSubmit={handleSubmit}

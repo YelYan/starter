@@ -11,6 +11,7 @@ const { logger, logEvents } = require("./middlewares/logger");
 const errhandler = require("./middlewares/errHandler");
 const rootRoute = require("./routes/root");
 const authRoutes = require("./routes/auth/authRoutes");
+const productRoutes = require("./routes/admin/productsRoutes");
 
 const app = express();
 dotenv.config();
@@ -42,6 +43,7 @@ app.use(express.static("public"));
 // api routes
 app.use(rootRoute);
 app.use("/api/v1", authRoutes);
+app.use("/api/v1", productRoutes);
 
 app.use(errhandler);
 

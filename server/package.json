@@ -9,6 +9,8 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "-": "^0.0.1",
+    "@supabase/supabase-js": "^2.47.11",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.5.1",
     "colors": "^1.4.0",
