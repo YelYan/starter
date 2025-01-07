@@ -142,7 +142,7 @@ const ShoppingHeader = () => {
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
   // const isAuthenticated = false;
 
-  function checkAuthenticated(isAuthenticated: boolean) {
+  function checkAuthenticated(isAuthenticated: boolean | null) {
     return <>{isAuthenticated ? <HeaderRightContent /> : <AuthButtons />}</>;
   }
   return (

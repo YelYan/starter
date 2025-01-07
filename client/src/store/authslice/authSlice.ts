@@ -4,14 +4,14 @@ import { API_URL } from "@/config/api";
 import { ReqLoginFormT , ReqRegisterFormT , ResLoginFormT} from "@/types/auth";
 
 export interface authStateT {
-    isAuthenticated : boolean,
+    isAuthenticated : null | boolean,
     isLoading : boolean,
     user : null | ResLoginFormT
     error? : string | null
 }
 
 const initialState : authStateT = {
-    isAuthenticated : false,
+    isAuthenticated : null,
     isLoading : false,
     user : null,
     error : null
@@ -75,14 +75,14 @@ export const authSlice = createSlice({
         .addCase(registerUser.rejected , (state, action) => {
             state.isLoading = false;
             state.user = null;
-            state.isAuthenticated  = false
+            state.isAuthenticated  = null
             state.error = action.error.message || "Register Failed! Please try again"
         })
         .addCase(loginUser.pending, (state) => {
             state.isLoading = true
         })
         .addCase(loginUser.fulfilled , (state , action) => {
-            console.log(action , "user login check")
+            // console.log(action , "user login check")
             state.isLoading = false;
             state.user = action.payload.success ? action.payload.user : null;
             state.isAuthenticated  = action.payload.success
@@ -90,7 +90,7 @@ export const authSlice = createSlice({
         .addCase(loginUser.rejected , (state, action) => {
             state.isLoading = false;
             state.user = null;
-            state.isAuthenticated  = false
+            state.isAuthenticated  = null
             state.error = action.error.message || "Login Failed! Please try again"
         })
         .addCase(logoutUser.pending, (state) => {
@@ -104,7 +104,7 @@ export const authSlice = createSlice({
         .addCase(logoutUser.rejected , (state, action) => {
             state.isLoading = false;
             state.user = null;
-            state.isAuthenticated  = false
+            state.isAuthenticated  = null
             state.error = action.error.message || "Logout Failed! Please try again"
         })
         .addCase(checkAuthenticated.pending, (state) => {
@@ -118,7 +118,7 @@ export const authSlice = createSlice({
         .addCase(checkAuthenticated.rejected , (state, action) => {
             state.isLoading = false;
             state.user = null;
-            state.isAuthenticated  = false
+            state.isAuthenticated  = null
             state.error = action.error.message || "Please try again"
         })
     },

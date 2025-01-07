@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "./store/hook";
 import { checkAuthenticated } from "./store/authslice/authSlice";
+import GlobalLoading from "@/components/ui/global-loading";
 
 import CheckAuth from "./components/common/CheckAuth";
 
@@ -38,16 +39,12 @@ const App = () => {
     (state) => state.auth
   );
 
-  console.log(isAuthenticated, "authenticated!!!");
-  console.log(user, "user!!!");
-  console.log(isLoading, "isLoading!!!");
-
   // every time the app loads, check if the user is authenticated
   useEffect(() => {
     dispatch(checkAuthenticated());
   }, [dispatch]);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <GlobalLoading />;
 
   return (
     <div className="bg-white flex flex-col overflow-hidden">
