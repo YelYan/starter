@@ -4,18 +4,25 @@ import {
   ClipboardList,
   ChartNoAxesCombined,
 } from "lucide-react";
+import { NavLink } from "react-router-dom";
 
 const sideItems = [
   {
-    title: "Dashboard",
+    id: "dashboard",
+    label: "Dashboard",
+    path: "/admin/dashboard",
     icon: <LayoutDashboard />,
   },
   {
-    title: "Products",
+    id: "products",
+    label: "Products",
+    path: "/admin/products",
     icon: <Box />,
   },
   {
-    title: "Orders",
+    id: "orders",
+    label: "Orders",
+    path: "/admin/orders",
     icon: <ClipboardList />,
   },
 ];
@@ -40,18 +47,26 @@ const AdminSideBar = ({ openSidebar }: { openSidebar: boolean }) => {
         )}
       </div>
 
-      <ul
-        className={`flex flex-col gap-6 w-full bg-green-300 px-4 py-2 ${
+      <div
+        className={`flex flex-col w-full  py-2 ${
           openSidebar ? "items-center" : "items-start"
         }`}
       >
         {sideItems.map((item) => (
-          <li key={item.title} className="flex gap-2 cursor-pointer">
+          <NavLink
+            to={item.path}
+            key={item.id}
+            className={({ isActive }) =>
+              `flex gap-2 cursor-pointer w-full py-3 px-4 ${
+                isActive ? "bg-blue-400 text-white" : ""
+              }`
+            }
+          >
             {item.icon}
-            {!openSidebar && item.title}
-          </li>
+            {!openSidebar && item.label}
+          </NavLink>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };

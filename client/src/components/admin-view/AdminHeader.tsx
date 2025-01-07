@@ -2,6 +2,7 @@ import React from "react";
 import { SquareMenu } from "lucide-react";
 import { LogOut } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
 import { ToastAction } from "@/components/ui/toast";
 import { useNavigate } from "react-router-dom";
 
@@ -49,13 +50,13 @@ const AdminHeader = ({ openSidebar, setOpenSidebar }: AdminHeaderT) => {
         className="cursor-pointer"
         onClick={() => setOpenSidebar(!openSidebar)}
       />
-      <div
-        className="cursor-pointer flex items-center gap-2"
+      <Button
+        className="cursor-pointer flex items-center gap-2 h-8 px-2 bg-blue-500 hover:bg-blue-400"
         onClick={handleLogOut}
       >
         <LogOut className="w-5 h-5" />
         Log out
-      </div>
+      </Button>
     </div>
   );
 };
