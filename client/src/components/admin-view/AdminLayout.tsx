@@ -9,7 +9,7 @@ const AdminLayout = () => {
     <div className="flex min-h-screen w-full h-auto">
       <AdminSideBar openSidebar={openSidebar} />
 
-      <main className="flex flex-col gap-2 bg-green-50 max-h-screen w-full overflow-y-hidden">
+      <main className="flex flex-col gap-2 max-h-screen w-full overflow-y-hidden">
         <AdminHeader
           openSidebar={openSidebar}
           setOpenSidebar={setOpenSidebar}

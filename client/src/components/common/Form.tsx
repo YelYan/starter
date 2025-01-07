@@ -16,6 +16,8 @@ import {
 import { CommonFormPropsT } from "@/types/common";
 import LoadingSpinner from "@/components/ui/loadingSpinner";
 
+type DefaultValuesT = Record<string, string | number | undefined>;
+
 const CommonForm = ({
   onSubmit,
   formControls,
@@ -25,13 +27,17 @@ const CommonForm = ({
   // Define Zod schema based on formControls
   const schema = z.object(
     formControls.reduce<Record<string, z.ZodTypeAny>>((acc, formControl) => {
-      const { name, validation } = formControl;
+      const { name, validation, type } = formControl;
       let rule = z.string();
 
       if (name === "email") {
         rule = rule.email("Invalid email address");
       }
-
+      if (type === "number") {
+        rule = z
+          .number({ invalid_type_error: "Must be a number" })
+          .min(0, "Value must be zero or above");
+      }
       if (name === "password") {
         rule = rule.min(8, "Password must be at least 8 characters long");
       }
@@ -58,13 +64,14 @@ const CommonForm = ({
     formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
-    defaultValues: formControls.reduce<Record<string, string>>(
-      (acc, control) => {
+    defaultValues: formControls.reduce<DefaultValuesT>((acc, control) => {
+      if (control.type === "number") {
+        acc[control.name] = 0; // Default all number fields to 0
+      } else {
         acc[control.name] = ""; // Default all fields to empty string
-        return acc;
-      },
-      {}
-    ),
+      }
+      return acc;
+    }, {}),
   });
 
   // error message animation
@@ -104,7 +111,20 @@ const CommonForm = ({
                           {...field}
                           id={formControl.name}
                           type={formControl.type}
+                          min={formControl.type === "number" ? 0 : undefined}
                           placeholder={formControl.placeholder}
+                          //prevent from focusing on input when scrolling
+                          onWheel={(e) => (e.target as HTMLInputElement).blur()}
+                          onChange={(e) => {
+                            if (formControl.type === "number") {
+                              const value = parseInt(e.target.value, 10);
+                              field.onChange(
+                                isNaN(value) || value < 0 ? "" : value
+                              ); // Prevent negative values
+                            } else {
+                              field.onChange(e.target.value);
+                            }
+                          }}
                         />
                         {errors[formControl.name] &&
                           renderError(formControl.name)}
@@ -129,7 +149,7 @@ const CommonForm = ({
                       <>
                         <Select
                           onValueChange={field.onChange}
-                          defaultValue={field.value}
+                          defaultValue={field.value?.toString()}
                         >
                           <SelectTrigger className="w-full">
                             <SelectValue
