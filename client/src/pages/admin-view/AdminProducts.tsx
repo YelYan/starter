@@ -10,15 +10,18 @@ import {
 
 import { addProductFormElements } from "@/config";
 import CommonForm from "@/components/common/Form";
+import Imageuploader from "@/components/admin-view/Imageuploader";
+import { ReqProductT } from "@/types/products";
 
 const AdminProducts = () => {
   const [openProductsDialog, setOpenProductsDialog] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   function closeProductsDialog() {
     setOpenProductsDialog(!openProductsDialog);
   }
 
-  function handleSubmit(data: any) {
+  function handleSubmit(data: ReqProductT) {
     console.log(data);
   }
 
@@ -40,7 +43,8 @@ const AdminProducts = () => {
             </SheetDescription>
           </SheetHeader>
 
-          <div className="mt-4">
+          <div className="mt-4 space-y-4">
+            <Imageuploader imageFile={imageFile} setImageFile={setImageFile} />
             <CommonForm
               formControls={addProductFormElements}
               onSubmit={handleSubmit}
