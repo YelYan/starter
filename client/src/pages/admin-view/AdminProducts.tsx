@@ -17,6 +17,10 @@ const AdminProducts = () => {
   const [openProductsDialog, setOpenProductsDialog] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageLoading, setImageLoading] = useState(false);
+  const [uploadedImgRes, setuploadedImgRes] = useState({
+    url: "",
+    message: "",
+  });
 
   function closeProductsDialog() {
     setOpenProductsDialog(!openProductsDialog);
@@ -50,6 +54,8 @@ const AdminProducts = () => {
               setImageFile={setImageFile}
               imageLoading={imageLoading}
               setImageLoading={setImageLoading}
+              uploadedImgRes={uploadedImgRes}
+              setuploadedImgRes={setuploadedImgRes}
             />
             <CommonForm
               formControls={addProductFormElements}

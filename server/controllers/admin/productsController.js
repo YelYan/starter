@@ -19,7 +19,13 @@ const handleImageUpload = async (req, res) => {
       .from("e-commerce-img-upload")
       .getPublicUrl(supabaseData.path);
 
-    res.status(200).json({ success: true, url: data.publicUrl });
+    res
+      .status(200)
+      .json({
+        success: true,
+        url: data.publicUrl,
+        message: "Image uploaded successfully",
+      });
   } catch (error) {
     console.log(error);
     res.status(500).json({
