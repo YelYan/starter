@@ -10,6 +10,7 @@ const ProductScehma = new mongoose.schema(
     price: Number,
     salePrice: Number,
     totalStock: Number,
+    averageReview: Number,
   },
   { timestamps: true }
 );

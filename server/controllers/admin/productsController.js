@@ -47,6 +47,7 @@ const createProduct = asyncHandler(async (req, res) => {
     price,
     salePrice,
     totalStock,
+    averageReview,
   } = req.body;
 
   const newlyCreateProduct = new Product({
@@ -58,6 +59,7 @@ const createProduct = asyncHandler(async (req, res) => {
     price,
     salePrice,
     totalStock,
+    averageReview,
   });
 
   await newlyCreateProduct.save();
@@ -89,6 +91,7 @@ const editProduct = asyncHandler(async (req, res) => {
     price,
     salePrice,
     totalStock,
+    averageReview,
   } = req.body;
 
   let findProduct = await Product.findById(id);
