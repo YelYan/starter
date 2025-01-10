@@ -1,4 +1,5 @@
 export type ReqProductT = {
+    image? : string | null,
     title : string,
     description : string;
     category : string;
@@ -6,4 +7,8 @@ export type ReqProductT = {
     price : number;
     salePrice ?: number;
     totalStock : number;
+}
+
+export type ResProductT = ReqProductT & {
+    _id? : string
 }
