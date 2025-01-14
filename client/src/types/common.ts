@@ -12,6 +12,7 @@ export type FormControlsT = Record<"name" | "label" | "componentType" , string> 
 export type CommonFormPropsT<T> = {
     onSubmit: (data:T) => void;
     formControls: FormControlsT[];
+    formData? : T
     buttonText? : string
     isLoading? : boolean
 }

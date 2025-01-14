@@ -32,10 +32,21 @@ export const addProduct = createAsyncThunk('/admin/add-product' , async (formDat
        return rejectWithValue(error?.response?.data?.message || "Something went wrong!")
     }
 })
-export const editProduct = createAsyncThunk('/admin/edit-product' , async ({formData, id}, {rejectWithValue}) => {
+
+
+export const editProduct = createAsyncThunk('/admin/edit-product' , async ({formData, id}: {formData : ReqProductT, id : string | undefined}, {rejectWithValue}) => {
     console.log(formData , id)
     try {
-        const response = await axios.post(`${API_URL}/products/edit/${id}`, formData, {withCredentials : true});
+        const response = await axios.put(`${API_URL}/products/edit/${id}`, formData, {withCredentials : true});
+        return response.data
+    } catch (error : any) {
+       return rejectWithValue(error?.response?.data?.message || "Something went wrong!")
+    }
+})
+
+export const getSingleProduct = createAsyncThunk('/admin/single-product' , async ( productId : string | undefined, {rejectWithValue}) => {
+    try {
+        const response = await axios.get(`${API_URL}/products/${productId}` ,{withCredentials : true});
         return response.data
     } catch (error : any) {
        return rejectWithValue(error?.response?.data?.message || "Something went wrong!")

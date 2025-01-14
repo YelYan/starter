@@ -14,9 +14,14 @@ import { ResProductT } from "@/types/products";
 type AdminProductListT = {
   product: ResProductT;
   handleDelete?: (productId: string | undefined) => void;
+  handleEdit?: (productId: string | undefined) => void;
 };
 
-const AdminProductList = ({ product, handleDelete }: AdminProductListT) => {
+const AdminProductList = ({
+  product,
+  handleDelete,
+  handleEdit,
+}: AdminProductListT) => {
   return (
     <Card className="overflow-hidden">
       <CardHeader className="p-0 h-[15rem]">
@@ -46,7 +51,11 @@ const AdminProductList = ({ product, handleDelete }: AdminProductListT) => {
         </div>
       </CardContent>
       <CardFooter className="flex gap-2 items-center px-2 py-3">
-        <Button size={"sm"} variant={"primary"}>
+        <Button
+          size={"sm"}
+          variant={"primary"}
+          onClick={() => handleEdit?.(product?._id)}
+        >
           Edit
         </Button>
 

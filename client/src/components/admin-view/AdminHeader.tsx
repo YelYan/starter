@@ -45,7 +45,7 @@ const AdminHeader = ({ openSidebar, setOpenSidebar }: AdminHeaderT) => {
       });
   }
   return (
-    <div className="bg-white border-b border-gray-100 shadow-sm py-4 px-4 flex items-center justify-between">
+    <div className="bg-white border-b border-gray-100 shadow-sm py-4 px-4 flex items-center justify-between sticky top-0">
       <SquareMenu
         className="cursor-pointer"
         onClick={() => setOpenSidebar(!openSidebar)}

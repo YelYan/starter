@@ -27,7 +27,6 @@ const handleImageUpload = async (req, res) => {
       message: "Image uploaded successfully",
     });
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       success: false,
       message: "Internal server error",
@@ -124,6 +123,26 @@ const editProduct = asyncHandler(async (req, res) => {
   });
 });
 
+// @desc get single product
+const getSingleProduct = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const findProduct = await Product.findById(id);
+
+  if (!findProduct) {
+    return res.status(404).json({
+      success: true,
+      message: "Product Not Found!",
+    });
+  }
+
+  return res.status(200).json({
+    success: true,
+    message: "Single Product get successfully!",
+    data: findProduct,
+  });
+});
+
 // @desc dele single product
 const deleteproduct = asyncHandler(async (req, res) => {
   const { id } = req.params;
@@ -149,4 +168,5 @@ module.exports = {
   getAllProducts,
   createProduct,
   editProduct,
+  getSingleProduct,
 };

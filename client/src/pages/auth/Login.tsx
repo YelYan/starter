@@ -49,6 +49,10 @@ const Login = () => {
         <span className="text-blue-500">Login</span> to Your Account
       </h1>
       <CommonForm
+        formData={{
+          email: "",
+          password: "",
+        }}
         onSubmit={handleSubmit}
         formControls={loginformControls}
         buttonText="Login"
