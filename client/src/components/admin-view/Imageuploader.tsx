@@ -62,7 +62,7 @@ const Imageuploader = ({
 
       try {
         const response = await axios.post(
-          `${API_URL}/products/upload-image`,
+          `${API_URL}/admin/products/upload-image`,
           formData,
           {
             withCredentials: true,

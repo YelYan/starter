@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
 import authReducer from './authslice/authSlice'
 import adminProductReducer from './adminSlice/productSlice/productSlice'
+import searchProductReducer from './searchSlice/searchSlice'
 
 export const store = configureStore({
     reducer : {
         auth : authReducer,
         adminProduct :adminProductReducer,
+        searchProduct : searchProductReducer,
     }
 })
 

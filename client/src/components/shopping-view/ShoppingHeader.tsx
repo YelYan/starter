@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, UserCog, LogOut, ShoppingCart } from "lucide-react";
-import { Label } from "@/components/ui/label";
+import { Menu, UserCog, LogOut, ShoppingCart, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -13,29 +12,66 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "../ui/toast";
+import debounce from "lodash/debounce";
 
 import Logo from "/favicon.svg";
 import DefaultPic from "/default-pic.png";
 import { useAppSelector, useAppDispatch } from "@/store/hook";
 import { logoutUser } from "@/store/authslice/authSlice";
-import { shoppingHeaderMenuItems } from "@/config";
 import UserCartWrapper from "./UserCartWrapper";
 
-type MenuItemsT = Record<"id" | "label" | "path", string>;
-
 const MenuItems = () => {
-  function handleNavigate(menuItems: MenuItemsT) {
-    console.log(menuItems);
+  const [limit, setLimit] = useState("10");
+  const navigate = useNavigate();
+  function handleDebounceFn(val: string) {
+    if (val && limit) {
+      navigate(`/shop/search?q=${val}&page=1&limit=${limit}`);
+    } else {
+      navigate("/shop/search");
+    }
+  }
+
+  const debounceFn = debounce(handleDebounceFn, 500);
+  function handleSearch(e: React.ChangeEvent<HTMLInputElement>) {
+    debounceFn(e.target.value);
   }
   return (
-    <div className="flex flex-col lg:flex-row gap-4">
-      {shoppingHeaderMenuItems.map((menuItems) => (
-        <Label key={menuItems.id} onClick={() => handleNavigate(menuItems)}>
-          {menuItems.label}
-        </Label>
-      ))}
+    <div className="relative w-full flex items-center gap-1">
+      <Select value={limit} onValueChange={(value) => setLimit(value)}>
+        <SelectTrigger className="w-[130px] h-full border border-gray-300 focus:ring-blue-500 focus:border-blue-500">
+          <SelectValue placeholder="Product limit" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="10">10 per page</SelectItem>
+          <SelectItem value="15">15 per page</SelectItem>
+          <SelectItem value="20">20 per page</SelectItem>
+        </SelectContent>
+      </Select>
+      <div className="relative w-full">
+        <Input
+          onChange={handleSearch}
+          type="search"
+          className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-s-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
+          placeholder="Search Product..."
+        />
+        <button
+          type="submit"
+          className="absolute top-0 end-0 grid place-content-center p-2.5 text-sm font-medium h-full text-white bg-blue-500 rounded-e-lg border border-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        >
+          <Search />
+          <span className="sr-only">Search</span>
+        </button>
+      </div>
     </div>
   );
 };
@@ -152,7 +188,7 @@ const ShoppingHeader = () => {
         <img src={Logo} alt="" className="w-5 h-5" />
       </Link>
 
-      <div className="hidden lg:block">
+      <div className="hidden lg:flex lg:basis-[40%]">
         <MenuItems />
       </div>
 
