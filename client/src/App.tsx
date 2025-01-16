@@ -28,6 +28,7 @@ import Search from "./pages/shopping-view/Search";
 import ShoppinListing from "./pages/shopping-view/ShoppinListing";
 import ShoppingCheckout from "./pages/shopping-view/ShoppingCheckout";
 import ShoppingAccount from "./pages/shopping-view/ShoppingAccount";
+import ShoppingProductDetails from "./pages/shopping-view/ShoppingProductDetails";
 
 // Not found
 import NotFound from "./pages/NoFound/NotFound";
@@ -97,6 +98,7 @@ const App = () => {
           <Route path="checkout" element={<ShoppingCheckout />} />
           <Route path="account" element={<ShoppingAccount />} />
           <Route path="search" element={<Search />} />
+          <Route path="products/:id" element={<ShoppingProductDetails />} />
         </Route>
         <Route path="unauth-page" element={<UnAuth />} />
         <Route path="*" element={<NotFound />} />

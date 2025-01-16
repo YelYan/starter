@@ -55,7 +55,7 @@ const CheckAuth = ({ isAuthenticated, user, children }: CheckAuthT) => {
     return <Navigate to="/unauth-page" />;
   }
 
-  // if user is not authenticated & choose other rputes redirect to login page
+  // if user is not authenticated & choose other routes redirect to login page
   if (
     !isAuthenticated &&
     !location.pathname.includes("/login") &&

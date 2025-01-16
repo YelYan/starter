@@ -32,22 +32,34 @@ import UserCartWrapper from "./UserCartWrapper";
 
 const MenuItems = () => {
   const [limit, setLimit] = useState("10");
+  const [searchVal, setSearchVal] = useState("");
   const navigate = useNavigate();
-  function handleDebounceFn(val: string) {
-    if (val && limit) {
-      navigate(`/shop/search?q=${val}&page=1&limit=${limit}`);
+
+  function handleLimit(value: string) {
+    setLimit(value);
+  }
+
+  function handleSearchSubmit() {
+    if (searchVal && limit) {
+      navigate(`/shop/search?q=${searchVal}&page=1&limit=${limit}`);
     } else {
       navigate("/shop/search");
     }
   }
 
-  const debounceFn = debounce(handleDebounceFn, 500);
-  function handleSearch(e: React.ChangeEvent<HTMLInputElement>) {
-    debounceFn(e.target.value);
+  const handleSearchChange = debounce((val: string) => {
+    setSearchVal(val);
+  }, 500);
+
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleSearchSubmit();
+    }
   }
   return (
     <div className="relative w-full flex items-center gap-1">
-      <Select value={limit} onValueChange={(value) => setLimit(value)}>
+      <Select value={limit} onValueChange={handleLimit}>
         <SelectTrigger className="w-[130px] h-full border border-gray-300 focus:ring-blue-500 focus:border-blue-500">
           <SelectValue placeholder="Product limit" />
         </SelectTrigger>
@@ -59,13 +71,17 @@ const MenuItems = () => {
       </Select>
       <div className="relative w-full">
         <Input
-          onChange={handleSearch}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            handleSearchChange(e.target.value)
+          }
+          onKeyDown={handleKeyDown}
           type="search"
           className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-s-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
           placeholder="Search Product..."
         />
         <button
           type="submit"
+          onClick={handleSearchSubmit}
           className="absolute top-0 end-0 grid place-content-center p-2.5 text-sm font-medium h-full text-white bg-blue-500 rounded-e-lg border border-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
           <Search />

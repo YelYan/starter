@@ -26,8 +26,7 @@ const searchProducts = asynchandler(async (req, res) => {
       .skip((page - 1) * limit) // Skip documents for previous pages
       .limit(limit); // Limit the number of documents returned
 
-    const totalProducts = await Product.countDocuments(searchResults);
-    console.log(totalProducts);
+    const totalProducts = await Product.countDocuments(createSearchQuery);
 
     // calculate total pages
     const totalPages = Math.ceil(totalProducts / limit);
