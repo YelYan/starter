@@ -12,7 +12,7 @@ import {
 
 import { searchProducts } from "@/store/searchSlice/searchSlice";
 import CardSkeleton from "@/components/ui/card-skeleton";
-import SearchProductCard from "@/components/shopping-view/SearchProductCard";
+import ProductCard from "@/components/shopping-view/ProductCard";
 
 const Search = () => {
   const location = useLocation();
@@ -48,7 +48,7 @@ const Search = () => {
       </h1>
 
       {searchResult?.length === 0 && (
-        <h1 className="my-10 text-center text-xl text-black font-medium">
+        <h1 className="py-20 text-center text-xl text-black font-medium">
           No Product Found!
         </h1>
       )}
@@ -56,7 +56,7 @@ const Search = () => {
       {/* show product list */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         {searchResult?.map((result) => (
-          <SearchProductCard key={result._id} result={result} />
+          <ProductCard key={result._id} result={result} />
         ))}
       </div>
 

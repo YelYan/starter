@@ -155,3 +155,28 @@ export const addProductFormElements = [
       validation : {required : true}
     },
 ];
+
+export const filteroptions = {
+  category : [
+    { value: "men", label: "Men" },
+    { value: "women", label: "Women" },
+    { value: "kids", label: "Kids" },
+    { value: "accessories", label: "Accessories" },
+    { value: "footwear", label: "Footwear" },
+  ],
+  brand : [
+    { value: "nike", label: "Nike" },
+    { value: "adidas", label: "Adidas" },
+    { value: "puma", label: "Puma" },
+    { value: "levi", label: "Levi's" },
+    { value: "zara", label: "Zara" },
+    { value: "h&m", label: "H&M" },
+  ],
+}
+
+export const sortOptions = [
+  { id: "price-lowtohigh", label: "Price: Low to High" },
+  { id: "price-hightolow", label: "Price: High to Low" },
+  { id: "title-atoz", label: "Title: A to Z" },
+  { id: "title-ztoa", label: "Title: Z to A" },
+];

@@ -6,15 +6,21 @@ import { Button } from "../ui/button";
 import UserCartItems from "./UserCartItems";
 
 type UserCartWrapperT = {
-  setOpenCartSheet: React.Dispatch<React.SetStateAction<boolean>>;
+  type: "cart" | "wishlist";
+  setOpenCartSheet?: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpenWishListSheet?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const UserCartWrapper = ({ setOpenCartSheet }: UserCartWrapperT) => {
+const UserCartWrapper = ({
+  type,
+  setOpenCartSheet,
+  setOpenWishListSheet,
+}: UserCartWrapperT) => {
   const navigate = useNavigate();
   return (
     <SheetContent side={"right"} className="w-full  space-y-4">
       <SheetHeader>
-        <SheetTitle>Your Cart</SheetTitle>
+        <SheetTitle>Your {type === "cart" ? "Cart" : "WishList"}</SheetTitle>
       </SheetHeader>
       <div className="">
         <UserCartItems />
@@ -23,15 +29,26 @@ const UserCartWrapper = ({ setOpenCartSheet }: UserCartWrapperT) => {
         <h6 className="font-medium">Total</h6>
         <p>$10</p>
       </div>
-      <Button
-        className="w-full"
-        onClick={() => {
-          navigate("/shop/checkout");
-          setOpenCartSheet(false);
-        }}
-      >
-        Check Out
-      </Button>
+      {type === "cart" ? (
+        <Button
+          className="w-full"
+          onClick={() => {
+            navigate("/shop/checkout");
+            setOpenCartSheet?.(false);
+          }}
+        >
+          Check Out
+        </Button>
+      ) : (
+        <Button
+          className="w-full"
+          onClick={() => {
+            setOpenWishListSheet?.(false);
+          }}
+        >
+          Add To Cart
+        </Button>
+      )}
     </SheetContent>
   );
 };

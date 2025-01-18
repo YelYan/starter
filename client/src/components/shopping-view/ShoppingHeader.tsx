@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu, UserCog, LogOut, ShoppingCart, Search } from "lucide-react";
+import { FaRegHeart } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -97,6 +98,7 @@ const HeaderRightContent = () => {
   const dispatch = useAppDispatch();
   const { toast } = useToast();
   const [openCartSheet, setOpenCartSheet] = useState(false);
+  const [openWishListSheet, setOpenWishListSheet] = useState(false);
 
   function handleLogOut() {
     dispatch(logoutUser())
@@ -125,6 +127,7 @@ const HeaderRightContent = () => {
   }
   return (
     <div className="flex items-center gap-4">
+      {/* cart */}
       <Sheet
         open={openCartSheet}
         onOpenChange={() => setOpenCartSheet(!openCartSheet)}
@@ -142,7 +145,31 @@ const HeaderRightContent = () => {
             <span className="sr-only">User cart</span>
           </Button>
         </SheetTrigger>
-        <UserCartWrapper setOpenCartSheet={setOpenCartSheet} />
+        <UserCartWrapper type="cart" setOpenCartSheet={setOpenCartSheet} />
+      </Sheet>
+
+      {/* wish list */}
+      <Sheet
+        open={openWishListSheet}
+        onOpenChange={() => setOpenWishListSheet(!openWishListSheet)}
+      >
+        <SheetTrigger asChild>
+          <Button
+            variant={"outline"}
+            size={"icon"}
+            className="border-none bg-white relative"
+          >
+            <FaRegHeart className="cursor-pointer w-5 h-5" />
+            <span className="bg-red-500 absolute top-0 -right-1 text-white text-xs py-0 px-1 rounded">
+              2
+            </span>
+            <span className="sr-only">Wishlist</span>
+          </Button>
+        </SheetTrigger>
+        <UserCartWrapper
+          type="wishlist"
+          setOpenWishListSheet={setOpenWishListSheet}
+        />
       </Sheet>
 
       <DropdownMenu>
