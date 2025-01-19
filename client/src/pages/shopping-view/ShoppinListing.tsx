@@ -10,18 +10,58 @@ import {
 import { Button } from "@/components/ui/button";
 
 import ProductFilter from "@/components/shopping-view/ProductFilter";
-import ShoppingProducts from "@/components/shopping-view/ShoppingProducts";
+import { useAppDispatch, useAppSelector } from "@/store/hook";
+import { fetchFilterProducts } from "@/store/shopSlice/productSlice/shopProductSlice";
+// import ShoppingProducts from "@/components/shopping-view/ShoppingProducts";
 import { sortOptions } from "@/config";
+import CardSkeleton from "@/components/ui/card-skeleton";
 
 const ShoppinListing = () => {
   const [sort, setSort] = useState("");
+  const [filters, setFilters] = useState<{
+    [key: string]: string[];
+  }>({
+    brand: [],
+    category: [],
+  });
+
+  const dispatch = useAppDispatch();
+
+  const { isLoading, productFilterList } = useAppSelector(
+    (state) => state.shopProductFilter
+  );
+
   function handleSort(value: string) {
     setSort(value);
   }
 
+  function handleFilters(keyItem: string, selectedVal: string) {
+    setFilters((prev) => {
+      const currentSelectedVals = prev[keyItem];
+
+      const updatedSelectedVals = currentSelectedVals.includes(selectedVal)
+        ? currentSelectedVals.filter((val) => val !== selectedVal)
+        : [...currentSelectedVals, selectedVal];
+
+      return {
+        ...prev,
+        [keyItem]: updatedSelectedVals,
+      };
+    });
+  }
+
+  function handleApplyFilter() {
+    dispatch(fetchFilterProducts(filters));
+  }
+
+  if (isLoading) return <CardSkeleton />;
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-4">
-      <ProductFilter />
+      <ProductFilter
+        handleFilters={handleFilters}
+        handleApplyFilter={handleApplyFilter}
+      />
 
       <div className="bg-background rounded-lg shadow-sm w-full">
         <div className="p-4 border-b flex items-center justify-between">

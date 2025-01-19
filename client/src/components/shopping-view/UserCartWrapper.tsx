@@ -1,9 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
+import { SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "../ui/button";
+import { useAppSelector } from "@/store/hook";
 
 import UserCartItems from "./UserCartItems";
+import AuthorizeDialog from "./AuthorizeDialog";
 
 type UserCartWrapperT = {
   type: "cart" | "wishlist";
@@ -17,6 +19,18 @@ const UserCartWrapper = ({
   setOpenWishListSheet,
 }: UserCartWrapperT) => {
   const navigate = useNavigate();
+  const { isAuthenticated, user } = useAppSelector((state) => state.auth);
+
+  function handleCheckOut() {
+    if (isAuthenticated && user) {
+      navigate("/shop/checkout");
+      setOpenCartSheet?.(false);
+    }
+  }
+
+  function handleAddToCart() {
+    setOpenWishListSheet?.(false);
+  }
   return (
     <SheetContent side={"right"} className="w-full  space-y-4">
       <SheetHeader>
@@ -30,24 +44,21 @@ const UserCartWrapper = ({
         <p>$10</p>
       </div>
       {type === "cart" ? (
-        <Button
-          className="w-full"
-          onClick={() => {
-            navigate("/shop/checkout");
-            setOpenCartSheet?.(false);
-          }}
-        >
-          Check Out
-        </Button>
+        <AuthorizeDialog
+          actionButton={
+            <Button className="w-full" onClick={handleCheckOut}>
+              Check Out
+            </Button>
+          }
+        />
       ) : (
-        <Button
-          className="w-full"
-          onClick={() => {
-            setOpenWishListSheet?.(false);
-          }}
-        >
-          Add To Cart
-        </Button>
+        <AuthorizeDialog
+          actionButton={
+            <Button className="w-full" onClick={handleAddToCart}>
+              Add To Cart
+            </Button>
+          }
+        />
       )}
     </SheetContent>
   );
