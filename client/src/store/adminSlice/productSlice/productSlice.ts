@@ -4,15 +4,28 @@ import { ResProductT, ReqProductT } from "@/types/products";
 
 import { API_URL } from "@/config/api";
 
+const singleProductVal = {
+    image : "",
+    title : "",
+    description : "",
+    category : "",
+    brand : "",
+    price : 0,
+    salePrice : 0,
+    totalStock : 0,
+}
+
 type AdminProductT = {
     isLoading : boolean;
     productList : ResProductT[];
+    singleProduct? : ResProductT
     error? : string | null
 }
 
 const initialState :AdminProductT = {
     isLoading : false,
     productList : [],
+    singleProduct : singleProductVal,
     error : null
 }
 
@@ -78,6 +91,19 @@ export const adminProductSlice = createSlice({
             state.productList = []
             state.error = action.error.message || "Some error occured!"
         })
+        .addCase(getSingleProduct.pending , (state) => {
+            state.isLoading = true
+        })
+        .addCase(getSingleProduct.fulfilled , (state , action) => {
+            state.isLoading = false
+            state.singleProduct = action.payload.success ? action.payload?.data : {}
+        })
+        .addCase(getSingleProduct.rejected , (state , action) => {
+            state.isLoading = false
+            state.productList = []
+            state.error = action.error.message || "Some error occured!"
+        })
+
     }
 })
 
