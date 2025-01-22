@@ -99,6 +99,7 @@ const App = () => {
           <Route path="account" element={<ShoppingAccount />} />
           <Route path="search" element={<Search />} />
           <Route path="products/:id" element={<ShoppingProductDetails />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
         <Route path="unauth-page" element={<UnAuth />} />
         <Route path="*" element={<NotFound />} />
