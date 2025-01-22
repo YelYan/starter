@@ -33,6 +33,7 @@ export const getAllProducts = createAsyncThunk('/admin/getAllProducts' , async (
     try {
         const response = await axios.get(`${API_URL}/admin/products/list`, {withCredentials : true});
         return response.data
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error : any) {
        return rejectWithValue(error?.response?.data?.message || "Something went wrong!")
     }
@@ -41,6 +42,7 @@ export const addProduct = createAsyncThunk('/admin/add-product' , async (formDat
     try {
         const response = await axios.post(`${API_URL}/admin/products/create`, formData, {withCredentials : true});
         return response.data
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error : any) {
        return rejectWithValue(error?.response?.data?.message || "Something went wrong!")
     }
@@ -52,6 +54,7 @@ export const editProduct = createAsyncThunk('/admin/edit-product' , async ({form
     try {
         const response = await axios.put(`${API_URL}/admin/products/edit/${id}`, formData, {withCredentials : true});
         return response.data
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error : any) {
        return rejectWithValue(error?.response?.data?.message || "Something went wrong!")
     }
@@ -61,6 +64,7 @@ export const getSingleProduct = createAsyncThunk('/admin/single-product' , async
     try {
         const response = await axios.get(`${API_URL}/admin/products/${productId}` ,{withCredentials : true});
         return response.data
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error : any) {
        return rejectWithValue(error?.response?.data?.message || "Something went wrong!")
     }
@@ -69,6 +73,7 @@ export const deleteProduct = createAsyncThunk('/admin/delete-products' , async (
     try {
         const response = await axios.delete(`${API_URL}/admin/products/delete/${productId}` ,{withCredentials : true});
         return response.data
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error : any) {
        return rejectWithValue(error?.response?.data?.message || "Something went wrong!")
     }

@@ -1,19 +1,23 @@
 import React, { useState } from "react";
+import { FaRegHeart } from "react-icons/fa";
+import { FaHeart } from "react-icons/fa6";
+import { Link } from "react-router-dom";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import { FaRegHeart } from "react-icons/fa";
-import { FaHeart } from "react-icons/fa6";
+import { Button } from "@/components/ui/button";
+
+import { useAppSelector } from "@/store/hook";
 import DefaultproductImg from "/default-ecommerce.png";
 import { ResProductT } from "@/types/products";
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 
 const ProductCard = ({ result }: { result: ResProductT }) => {
   const [wishList, setWishList] = useState(false);
+
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
 
   function handleWishList(e: React.MouseEvent, productId: string | undefined) {
     e.stopPropagation();
@@ -39,18 +43,20 @@ const ProductCard = ({ result }: { result: ResProductT }) => {
             alt={result?.title}
             className="w-full h-full object-cover"
           />
-          <Button
-            variant={"outline"}
-            size={"icon"}
-            className="absolute top-0 right-0 border-none"
-            onClick={(e) => handleWishList(e, result?._id)}
-          >
-            {wishList ? (
-              <FaHeart className="w-5 h-5 text-red-500" />
-            ) : (
-              <FaRegHeart className="w-5 h-5" />
-            )}
-          </Button>
+          {isAuthenticated && (
+            <Button
+              variant={"outline"}
+              size={"icon"}
+              className="absolute top-0 right-0 border-none"
+              onClick={(e) => handleWishList(e, result?._id)}
+            >
+              {wishList ? (
+                <FaHeart className="w-5 h-5 text-red-500" />
+              ) : (
+                <FaRegHeart className="w-5 h-5" />
+              )}
+            </Button>
+          )}
         </CardHeader>
 
         <CardContent className="px-3 py-2">

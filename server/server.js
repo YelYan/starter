@@ -14,6 +14,7 @@ const authRoutes = require("./routes/auth/authRoutes");
 const productRoutes = require("./routes/admin/productsRoutes");
 const shopSearchRoutes = require("./routes/shop/searchRoutes");
 const productFiltershopRoutes = require("./routes/shop/productRoutes");
+const productWishListRoutes = require("./routes/shop/wishListRoute");
 
 const app = express();
 dotenv.config();
@@ -49,6 +50,7 @@ app.use("/api/v1/admin", productRoutes);
 
 app.use("/api/v1/shop", shopSearchRoutes);
 app.use("/api/v1/shop", productFiltershopRoutes);
+app.use("/api/v1/shop", productWishListRoutes);
 
 app.use(errhandler);
 
