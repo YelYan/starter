@@ -1,5 +1,6 @@
 import { useCallback, useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
+import { useLocation } from "react-router-dom";
 import { debounce } from "lodash";
 import { ArrowUpDown } from "lucide-react";
 import {
@@ -37,6 +38,7 @@ const ShoppinListing = () => {
           category: [],
         };
   });
+  const location = useLocation();
 
   const dispatch = useAppDispatch();
   const columnCount = useResponsiveColumnCount();
@@ -67,6 +69,26 @@ const ShoppinListing = () => {
   const handleApplyFilter = debounce(() => {
     dispatch(fetchFilterProducts(filters));
   }, 800);
+
+  // navigate from home page & get filter value from URL
+  useEffect(() => {
+    if (location?.state?.filterValue) {
+      const filterKey = location.search.includes("brand")
+        ? "brand"
+        : "category";
+
+      console.log(location.search);
+
+      console.log(filterKey);
+
+      setFilters((prev) => ({
+        ...prev,
+        [filterKey]: [location.state.filterValue],
+      }));
+    }
+  }, [location.state, location.search]);
+
+  console.log(filters);
 
   // Save the sort state to sessionStorage whenever it changes
   useEffect(() => {

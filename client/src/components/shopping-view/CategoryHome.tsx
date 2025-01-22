@@ -34,7 +34,11 @@ const CategoryHome = () => {
         <h2 className="text-center text-xl font-bold">Shop By Brands</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full sm:w-[90%] md:w-4/5 mx-auto">
           {filteroptions?.brand?.map((b) => (
-            <Link key={b.value} to={`/shop/listing?brand=${b.value}`}>
+            <Link
+              key={b.value}
+              to={`/shop/listing?brand=${b.value}`}
+              state={{ from: "Home Page", filterValue: b.value }}
+            >
               <Card className="h-32 hover:border-none hover:shadow-none">
                 <CardContent className="text-center flex items-center justify-center h-full">
                   <div className="flex flex-col gap-4 items-center">
@@ -57,7 +61,11 @@ const CategoryHome = () => {
         <h2 className="text-center text-xl font-bold">Shop By Categories</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full sm:w-[90%] md:w-4/5 mx-auto">
           {filteroptions?.category?.map((c) => (
-            <Link key={c.value} to={`/shop/listing?categories=${c.value}`}>
+            <Link
+              key={c.value}
+              to={`/shop/listing?category=${c.value}`}
+              state={{ from: "Home Page", filterValue: c.value }}
+            >
               <Card className="h-32 hover:border-none hover:shadow-none">
                 <CardContent className="text-center flex items-center justify-center h-full">
                   <div className="flex flex-col gap-4 items-center">

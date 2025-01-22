@@ -6,6 +6,7 @@ const getFilterProducts = asyncHanlder(async (req, res) => {
     const { category = [], brand = [], sortBy = "price-lowtohigh" } = req.body;
 
     let sort = {};
+    let filterquery = {};
 
     switch (sortBy) {
       case "price-lowtohigh":
@@ -22,14 +23,14 @@ const getFilterProducts = asyncHanlder(async (req, res) => {
         break;
     }
 
-    const filterData = await Product.find({
-      category: {
-        $in: category,
-      },
-      brand: {
-        $in: brand,
-      },
-    }).sort(sort);
+    if (category.length > 0) {
+      filterquery.category = { $in: category };
+    }
+    if (brand.length > 0) {
+      filterquery.brand = { $in: brand };
+    }
+
+    const filterData = await Product.find(filterquery).sort(sort);
 
     return res.status(200).json({
       success: true,
