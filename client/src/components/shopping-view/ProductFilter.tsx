@@ -4,6 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
+import { FilterDataT } from "@/types/products";
 
 type FilterOptions = {
   category: { value: string; label: string }[];
@@ -13,11 +14,13 @@ type FilterOptions = {
 type ProductFilterT = {
   handleFilters: (keyItem: string, selectedVal: string) => void;
   handleApplyFilter: () => void;
+  filters?: FilterDataT;
 };
 
 const ProductFilter = ({
   handleFilters,
   handleApplyFilter,
+  filters,
 }: ProductFilterT) => {
   return (
     <div className="bg-background rounded-lg shadow-sm">
@@ -25,7 +28,11 @@ const ProductFilter = ({
         <h2 className="text-lg font-extrabold">Filters</h2>
 
         <div className="">
-          <Button variant={"outline"} size={"sm"} onClick={handleApplyFilter}>
+          <Button
+            variant={"outline"}
+            size={"sm"}
+            onClick={() => handleApplyFilter()}
+          >
             Apply
           </Button>
         </div>
@@ -44,6 +51,14 @@ const ProductFilter = ({
                   >
                     <Checkbox
                       id={option.value}
+                      //
+                      checked={
+                        (filters &&
+                          Object.keys(filters).length > 0 &&
+                          filters[keyItem] &&
+                          filters?.[keyItem]?.includes(option?.value)) ||
+                        false
+                      }
                       onCheckedChange={(checked) => {
                         // for check & uncheck
                         if (checked) {

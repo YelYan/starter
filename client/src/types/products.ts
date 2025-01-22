@@ -12,3 +12,7 @@ export type ReqProductT = {
 export type ResProductT = ReqProductT & {
     _id? : string
 }
+
+export type FilterDataT = {
+[key : string] : string[] | string;
+}

@@ -1,15 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { API_URL } from "@/config/api";
 import axios from "axios";
-import { ResProductT } from "@/types/products";
+import { ResProductT , FilterDataT} from "@/types/products";
 
 type intialStateT = {
     isLoading : boolean;
     productFilterList : ResProductT[]
     error? : string | null
-
 }
-
 
 const initialState : intialStateT= {
     isLoading : false,
@@ -18,10 +16,13 @@ const initialState : intialStateT= {
 }
 
 
-export const fetchFilterProducts = createAsyncThunk("/shop/products/filter" , async (filterData , {rejectWithValue}) => {
+export const fetchFilterProducts = createAsyncThunk("/shop/products/filter" , async (filterData : FilterDataT & {
+    sortBy? : string
+}, {rejectWithValue}) => {
     try {
-        const response = await axios.post(`${API_URL}/shop/products/filter`, filterData , {withCredentials : true})
+        const response = await axios.post(`${API_URL}/shop/products/filter`, filterData  , {withCredentials : true})
         return response?.data
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error : any) {
         return rejectWithValue(error?.response?.data?.error || "Something went wrong!")
     }
