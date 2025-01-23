@@ -19,15 +19,16 @@ const addWishList = asyncHandler(async (req, res) => {
       // Add the product to the wishlist if it's not already there
       if (!wishList.products.includes(productId)) {
         wishList.products.push(productId);
+        console.log(wishList, "here");
       }
     }
 
     // Save the wishlist to the database
-    await wishList.save();
+    const savedWishList = await wishList.save();
 
     return res.status(201).json({
       success: true,
-      wishList,
+      savedWishList,
       message: "Product added to wishlist!",
     });
   } catch (error) {
@@ -48,6 +49,8 @@ const removeWishList = asyncHandler(async (req, res) => {
     // find user's wishlist
     const wishList = await WishList.findOne({ user: userId });
 
+    console.log(wishList.products, "PRODUCTS");
+
     if (!wishList) {
       return res.status(404).json({
         message: "WishList not found!",
@@ -56,10 +59,9 @@ const removeWishList = asyncHandler(async (req, res) => {
 
     // remove product from wishList
     wishList.products = wishList.products.filter(
-      (w) => w._id.toString() !== productId
+      (w) => w.toString() !== productId
     );
 
-    console.log(wishList.products);
     // Save the wishlist to the database
     await wishList.save();
 

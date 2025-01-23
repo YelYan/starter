@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaRegHeart } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa6";
 import { Link } from "react-router-dom";
@@ -10,21 +10,48 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
-import { useAppSelector } from "@/store/hook";
+import { useAppSelector, useAppDispatch } from "@/store/hook";
+import {
+  addWishList,
+  removeWishList,
+} from "@/store/shopSlice/wishListSlice/shopWishListSlice";
 import DefaultproductImg from "/default-ecommerce.png";
 import { ResProductT } from "@/types/products";
 
+/*
+store in object with boolean value so in that way we can track
+which product is put in wishlist or not
+*/
+
 const ProductCard = ({ result }: { result: ResProductT }) => {
-  const [wishList, setWishList] = useState(false);
+  const [wishList, setWishList] = useState<{ [key: string]: boolean }>(
+    JSON.parse(sessionStorage.getItem("wishList") || "{}") || {}
+  );
 
   const { isAuthenticated } = useAppSelector((state) => state.auth);
+
+  const dispatch = useAppDispatch();
+
+  // check productId exist or not if exist put it in wishList state else return false
+  const isProductInWishList = result?._id ? wishList[result._id] : false;
 
   function handleWishList(e: React.MouseEvent, productId: string | undefined) {
     e.stopPropagation();
     e.preventDefault();
-    setWishList((prev) => !prev);
 
-    console.log(productId);
+    // if there is no productId return;
+    if (!productId) return;
+
+    // setting value for wishlist object which is updated with value boolean
+    setWishList((prev) => ({
+      ...prev,
+      [productId]: !prev[productId],
+    }));
+    if (!isProductInWishList) {
+      dispatch(addWishList(productId));
+    } else {
+      dispatch(removeWishList(productId));
+    }
   }
 
   function handleaAddToCart(
@@ -34,6 +61,12 @@ const ProductCard = ({ result }: { result: ResProductT }) => {
     e.preventDefault();
     console.log(productId);
   }
+
+  // saving in seesion storage
+  useEffect(() => {
+    sessionStorage.setItem("wishList", JSON.stringify(wishList));
+  }, [wishList]);
+
   return (
     <Link key={result?._id} to={`/shop/products/${result?._id}`}>
       <Card className="overflow-hidden">
@@ -50,7 +83,7 @@ const ProductCard = ({ result }: { result: ResProductT }) => {
               className="absolute top-0 right-0 border-none"
               onClick={(e) => handleWishList(e, result?._id)}
             >
-              {wishList ? (
+              {isProductInWishList ? (
                 <FaHeart className="w-5 h-5 text-red-500" />
               ) : (
                 <FaRegHeart className="w-5 h-5" />

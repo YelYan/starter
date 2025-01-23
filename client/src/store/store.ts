@@ -3,6 +3,7 @@ import authReducer from './authslice/authSlice'
 import adminProductReducer from './adminSlice/productSlice/productSlice'
 import searchProductReducer from './searchSlice/searchSlice'
 import shopProductReducer from "./shopSlice/productSlice/shopProductSlice"
+import shopWishListReducer from "./shopSlice/wishListSlice/shopWishListSlice"
 
 export const store = configureStore({
     reducer : {
@@ -10,6 +11,7 @@ export const store = configureStore({
         adminProduct :adminProductReducer,
         searchProduct : searchProductReducer,
         shopProductFilter : shopProductReducer,
+        shopWishList :shopWishListReducer
     }
 })
 

@@ -1,22 +1,23 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { Button } from "../ui/button";
 import { useAppSelector } from "@/store/hook";
 
 import UserCartItems from "./UserCartItems";
-import AuthorizeDialog from "./AuthorizeDialog";
+import { ResProductT } from "@/types/products";
 
 type UserCartWrapperT = {
-  type: "cart" | "wishlist";
+  type: "cart" | "wishList";
   setOpenCartSheet?: React.Dispatch<React.SetStateAction<boolean>>;
   setOpenWishListSheet?: React.Dispatch<React.SetStateAction<boolean>>;
+  wishListData?: ResProductT[];
 };
 
 const UserCartWrapper = ({
   type,
   setOpenCartSheet,
   setOpenWishListSheet,
+  wishListData,
 }: UserCartWrapperT) => {
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
@@ -37,28 +38,20 @@ const UserCartWrapper = ({
         <SheetTitle>Your {type === "cart" ? "Cart" : "WishList"}</SheetTitle>
       </SheetHeader>
       <div className="">
-        <UserCartItems />
+        {(wishListData?.length ?? 0) > 0 && (
+          <UserCartItems
+            wishListData={wishListData}
+            type={type}
+            handleCheckOut={handleCheckOut}
+            handleAddToCart={handleAddToCart}
+          />
+        )}
       </div>
-      <div className="flex justify-between">
-        <h6 className="font-medium">Total</h6>
-        <p>$10</p>
-      </div>
-      {type === "cart" ? (
-        <AuthorizeDialog
-          actionButton={
-            <Button className="w-full" onClick={handleCheckOut}>
-              Check Out
-            </Button>
-          }
-        />
-      ) : (
-        <AuthorizeDialog
-          actionButton={
-            <Button className="w-full" onClick={handleAddToCart}>
-              Add To Cart
-            </Button>
-          }
-        />
+      {type === "cart" && (
+        <div className="flex justify-between">
+          <h6 className="font-medium">Total</h6>
+          <p>$10</p>
+        </div>
       )}
     </SheetContent>
   );

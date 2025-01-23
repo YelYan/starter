@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu, UserCog, LogOut, ShoppingCart, Search } from "lucide-react";
 import { FaRegHeart } from "react-icons/fa";
@@ -26,9 +26,11 @@ import { ToastAction } from "../ui/toast";
 import debounce from "lodash/debounce";
 
 import Logo from "/favicon.svg";
+import LoadingSpinner from "../ui/loadingSpinner";
 import DefaultPic from "/default-pic.png";
 import { useAppSelector, useAppDispatch } from "@/store/hook";
 import { logoutUser } from "@/store/authslice/authSlice";
+import { getWishList } from "@/store/shopSlice/wishListSlice/shopWishListSlice";
 import UserCartWrapper from "./UserCartWrapper";
 
 const MenuItems = () => {
@@ -100,6 +102,8 @@ const HeaderRightContent = () => {
   const [openCartSheet, setOpenCartSheet] = useState(false);
   const [openWishListSheet, setOpenWishListSheet] = useState(false);
 
+  const { wishList, isLoading } = useAppSelector((state) => state.shopWishList);
+
   function handleLogOut() {
     dispatch(logoutUser())
       .unwrap()
@@ -125,6 +129,10 @@ const HeaderRightContent = () => {
         });
       });
   }
+
+  useEffect(() => {
+    dispatch(getWishList());
+  }, [dispatch]);
   return (
     <div className="flex items-center gap-4">
       {/* cart */}
@@ -145,7 +153,11 @@ const HeaderRightContent = () => {
             <span className="sr-only">User cart</span>
           </Button>
         </SheetTrigger>
-        <UserCartWrapper type="cart" setOpenCartSheet={setOpenCartSheet} />
+        <UserCartWrapper
+          type="cart"
+          setOpenCartSheet={setOpenCartSheet}
+          wishListData={wishList?.products}
+        />
       </Sheet>
 
       {/* wish list */}
@@ -161,15 +173,20 @@ const HeaderRightContent = () => {
           >
             <FaRegHeart className="cursor-pointer w-5 h-5" />
             <span className="bg-red-500 absolute top-0 -right-1 text-white text-xs py-0 px-1 rounded">
-              2
+              {wishList?.products?.length}
             </span>
             <span className="sr-only">Wishlist</span>
           </Button>
         </SheetTrigger>
-        <UserCartWrapper
-          type="wishlist"
-          setOpenWishListSheet={setOpenWishListSheet}
-        />
+        {isLoading && <LoadingSpinner />}
+
+        {wishList?.products?.length > 0 && (
+          <UserCartWrapper
+            type="wishList"
+            setOpenWishListSheet={setOpenWishListSheet}
+            wishListData={wishList?.products}
+          />
+        )}
       </Sheet>
 
       <DropdownMenu>

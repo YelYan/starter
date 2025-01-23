@@ -77,18 +77,12 @@ const ShoppinListing = () => {
         ? "brand"
         : "category";
 
-      console.log(location.search);
-
-      console.log(filterKey);
-
       setFilters((prev) => ({
         ...prev,
         [filterKey]: [location.state.filterValue],
       }));
     }
   }, [location.state, location.search]);
-
-  console.log(filters);
 
   // Save the sort state to sessionStorage whenever it changes
   useEffect(() => {
